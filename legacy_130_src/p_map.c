@@ -417,7 +417,7 @@ static inline boolean P_CanDamageEnemyFromAbove (mobj_t *thing)
 
 static inline void P_DamageEnemy(mobj_t *target, mobj_t *inflictor)
 {
-#ifdef HERITAGE_ENEMY_STOPAFTERDEATH
+#ifdef HERITAGE_ENEMY_STOP_AT_DEATH
 	if ((target->health - 1) <= 0)
 		target->momx = target->momy = target->momz = 0;
 #endif

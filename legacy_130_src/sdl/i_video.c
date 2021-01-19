@@ -359,7 +359,7 @@ static INT32 Impl_SDL_Scancode_To_Keycode(SDL_Scancode code)
 
 static boolean IgnoreMouse(void)
 {
-#ifdef HERITAGE_MOUSEGRAB
+#ifdef HERITAGE_MOUSE_GRAB
 	if (cv_alwaysgrabmouse.value)
 		return false;
 	if (menuactive)
@@ -1345,10 +1345,10 @@ void I_StartupGraphics(void)
 	COM_AddCommand ("vid_modelist", VID_Command_ModeList_f);
 	COM_AddCommand ("vid_mode", VID_Command_Mode_f);
 	CV_RegisterVar (&cv_vidwait);
-#ifdef HERITAGE_ASPECTRATIO
+#ifdef HERITAGE_ASPECT_RATIO
 	CV_RegisterVar (&cv_stretch);
 #endif
-#ifdef HERITAGE_MOUSEGRAB
+#ifdef HERITAGE_MOUSE_GRAB
 	CV_RegisterVar (&cv_alwaysgrabmouse);
 #endif
 	disable_mouse = M_CheckParm("-nomouse");

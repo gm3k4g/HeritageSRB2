@@ -845,7 +845,7 @@ void R_ExecuteSetViewSize (void)
 	//      since the scale is not always the same between horiz. & vert.
 	projection  = centerxfrac;
 
-#ifdef HERITAGE_ASPECTRATIO
+#ifdef HERITAGE_ASPECT_RATIO
 	// Lactozilla: Aspect ratio
 	if (!cv_stretch.value)
 		projectiony = projection;
@@ -875,7 +875,7 @@ void R_ExecuteSetViewSize (void)
 	pspriteiscale = (BASEVIDWIDTH<<FRACBITS)/viewwidth;   // x axis scale
 
 	//added:02-02-98:now aspect ratio correct for psprites
-#ifdef HERITAGE_ASPECTRATIO
+#ifdef HERITAGE_ASPECT_RATIO
 	if (!cv_stretch.value)
 		pspriteyscale = pspritescale;
 	else

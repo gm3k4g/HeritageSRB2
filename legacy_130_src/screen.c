@@ -242,7 +242,7 @@ void SCR_Recalc (void)
 	dupx = vid.width / BASEVIDWIDTH;
 	dupy = vid.height / BASEVIDHEIGHT;
 
-#ifdef HERITAGE_ASPECTRATIO
+#ifdef HERITAGE_ASPECT_RATIO
 	// Lactozilla: Aspect ratio
 	if (!cv_stretch.value)
 		dupx = dupy = (dupx < dupy ? dupx : dupy);

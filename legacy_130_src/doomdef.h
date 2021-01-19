@@ -125,16 +125,16 @@
 
 // Lactozilla: Heritage patches
 #ifndef NOHERITAGE
-#define HERITAGE_ASPECTRATIO             // Disables aspect ratio correction
+#define HERITAGE_ASPECT_RATIO            // Makes aspect ratio correction optional
 #define HERITAGE_VIEWSIZE_FIX            // Fixes the screen size setting
 #define HERITAGE_SCREENSHOT_SHORTCUTS    // F8 and F9 keys take screenshots and movies, respectively
-#define HERITAGE_SCREENSHOT_COLORPROFILE // Enables color profile option for screenshots and movies
-#define HERITAGE_MOUSEGRAB               // Mouse grabbing port from 2.2
+#define HERITAGE_SCREENSHOT_COLORPROFILE // Enables color profile option for screenshots and movies, 2.2 port
+#define HERITAGE_MOUSE_GRAB              // Mouse grab port from 2.2
 #define HERITAGE_PAUSE_BEHAVIOR          // Modern pause behavior (instead of actually pausing the game)
-#define HERITAGE_PLAYER_MOVEMENT         // Modern player movement code
-#define HERITAGE_DIRECTIONCHAR           // directionchar
+#define HERITAGE_PLAYER_MOVEMENT         // Modern player movement code port from 2.2
+#define HERITAGE_DIRECTIONCHAR           // directionchar port from 2.2
 #define HERITAGE_ENEMY_COLLISION         // Fixes enemy collision
-#define HERITAGE_ENEMY_STOPAFTERDEATH    // Stop enemies from moving when they are killed
+#define HERITAGE_ENEMY_STOP_AT_DEATH     // Stops enemies from moving when they are destroyed
 #endif // NOHERITAGE
 
 // =========================================================================

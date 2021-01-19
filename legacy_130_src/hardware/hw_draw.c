@@ -107,7 +107,7 @@ static void SetPatchVertices(GlidePatch_t* gpatch, int x, int y, FOutVector *v)
 	//  0--1
 
 	if ( gr_scale_patch ) {
-#ifdef HERITAGE_ASPECTRATIO
+#ifdef HERITAGE_ASPECT_RATIO
 		// Lactozilla: Aspect ratio
 		if (!cv_stretch.value)
 		{
