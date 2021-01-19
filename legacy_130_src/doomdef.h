@@ -127,6 +127,8 @@
 #ifndef NOHERITAGE
 #define HERITAGE_ASPECT_RATIO            // Makes aspect ratio correction optional
 #define HERITAGE_VIEWSIZE_FIX            // Fixes the screen size setting
+#define HERITAGE_FADE_MENU_BACKGROUND    // Fades the background in the menu
+#define HERITAGE_CONNECTION_SCREEN       // Heritage's connection screen behavior for the console
 #define HERITAGE_SCREENSHOT_SHORTCUTS    // F8 and F9 keys take screenshots and movies, respectively
 #define HERITAGE_SCREENSHOT_COLORPROFILE // Enables color profile option for screenshots and movies, 2.2 port
 #define HERITAGE_MOUSE_GRAB              // Mouse grab port from 2.2

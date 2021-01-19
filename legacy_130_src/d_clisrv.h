@@ -244,8 +244,9 @@ void    SV_SpawnPlayer(int playernum,void *mobj);
 void    SV_StopServer( void );
 void    SV_ResetServer( void );
 
-void CL_AddSplitscreenPlayer( void );
-void CL_RemoveSplitscreenPlayer( void );
+void    CL_AddSplitscreenPlayer( void );
+void    CL_RemoveSplitscreenPlayer( void );
+boolean CL_ConnectionScreen( void );
 
 // Is there a game running
 boolean Playing(void);

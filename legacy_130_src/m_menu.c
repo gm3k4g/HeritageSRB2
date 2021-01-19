@@ -2892,8 +2892,10 @@ void M_Drawer (void)
 	//  set it 0 again before return!!!
 	scaledofs = vid.centerofs;
 
+#ifdef HERITAGE_FADE_MENU_BACKGROUND
 	// now that's more readable with a faded background (yeah like Quake...)
 	V_DrawFadeScreen (); // Tails 11-30-2000 (Re-added by Lactozilla, really hard to read otherwise)
+#endif
 
 	if (currentMenu->drawroutine)
 		currentMenu->drawroutine();      // call current menu Draw routine
@@ -2921,7 +2923,10 @@ void M_StartControlPanel (void)
 		COM_BufAddText("pause\n");
 #endif
 
-	CON_ToggleOff ();   // dirty hack : move away console
+#ifdef HERITAGE_CONNECTION_SCREEN
+	if (!CL_ConnectionScreen())
+#endif
+		CON_ToggleOff ();   // dirty hack : move away console
 }
 
 //

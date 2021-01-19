@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C++ -*-
 //-----------------------------------------------------------------------------
 //
 // $Id: console.h,v 1.2 2000/02/27 00:42:10 hurdler Exp $
@@ -64,6 +64,11 @@ void CON_ClearHUD (void);       // clear heads up messages
 
 void CON_Ticker (void);
 void CON_Drawer (void);
+
+#ifdef HERITAGE_CONNECTION_SCREEN
+void CON_SetConnectionScreen (void);
+#endif
+
 void CONS_Error (char *msg);       // print out error msg, and wait a key
 
 // force console to move out

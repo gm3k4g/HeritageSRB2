@@ -607,6 +607,11 @@ static void CL_ConnectToServer(void)
 	DEBFILE(va("waiting %d nodes\n",doomcom->numnodes));
 	gamestate = wipegamestate = GS_WAITINGPLAYERS;
 
+#ifdef HERITAGE_CONNECTION_SCREEN
+	if (CL_ConnectionScreen())
+		CON_SetConnectionScreen();
+#endif
+
 	numnodes=1;
 	oldtic=I_GetTime()-1;
 	asksent=-TICRATE/2;
@@ -825,7 +830,9 @@ static void CL_Reset (void)
 	{
 		drone=false;
 		viewangleoffset=0;
+#ifdef HERITAGE_THREE_SCREEN_MODE
 		VID_DefaultWindowTitle();
+#endif
 	}
 
 	// reset game engine
@@ -1236,6 +1243,11 @@ void CL_RemoveSplitscreenPlayer( void )
 	buf[0]=secondarydisplayplayer;
 	buf[1]=KICK_MSG_PLAYER_QUIT;
 	SendNetXCmd(XD_KICK,&buf,2);
+}
+
+boolean CL_ConnectionScreen( void )
+{
+	return (netgame && (!server) && (gamestate == GS_WAITINGPLAYERS));
 }
 
 // is there a game running

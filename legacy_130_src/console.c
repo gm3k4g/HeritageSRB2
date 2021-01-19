@@ -84,6 +84,10 @@ int      con_clipviewtop;// clip value for planes & sprites, so that the
                          // drawn when not needed, this must be -1 when
                          // console is off
 
+#ifdef HERITAGE_CONNECTION_SCREEN
+static boolean con_connectionscreen=false; // true while contacting a server
+#endif
+
 // TODO: choose max hud msg lines
 #define  CON_MAXHUDLINES      5
 
@@ -167,7 +171,7 @@ static void CONS_speed_Change (void)
 //
 static void CONS_Clear_f (void)
 {
-	memset(con_buffer,0,CON_BUFFERSIZE);
+    memset(con_buffer,0,CON_BUFFERSIZE);
 
     con_cx = 0;
     con_cy = con_totallines-1;
@@ -463,6 +467,10 @@ void CON_ClearHUD (void)
 
     for(i=0; i<con_hudlines; i++)
         con_hudtime[i]=0;
+
+#ifdef HERITAGE_CONNECTION_SCREEN
+    con_connectionscreen = false;
+#endif
 }
 
 
@@ -483,6 +491,14 @@ void CON_ToggleOff (void)
 }
 
 
+void CON_SetConnectionScreen (void)
+{
+	con_connectionscreen = true;
+	con_curlines = con_destlines = vid.height;
+	con_forcepic = 1;
+}
+
+
 //  Console ticker : handles console move in/out, cursor blinking
 //
 void CON_Ticker (void)
@@ -492,6 +508,14 @@ void CON_Ticker (void)
     // cursor blinking
     con_tick++;
     con_tick &= 7;
+
+#ifdef HERITAGE_CONNECTION_SCREEN
+	if (con_connectionscreen)
+	{
+		CON_SetConnectionScreen();
+		consoletoggle = false;
+	}
+#endif
 
     // console key was pushed
     if (consoletoggle)
@@ -510,8 +534,7 @@ void CON_Ticker (void)
             con_destlines = (cons_height.value*vid.height)/100;
             if (con_destlines < 20)
                 con_destlines = 20;
-            else
-            if (con_destlines > vid.height-ST_HEIGHT)
+            else if (con_destlines > vid.height-ST_HEIGHT)
                 con_destlines = vid.height-ST_HEIGHT;
 
             con_destlines &= ~0x3;      // multiple of text row height
@@ -521,7 +544,6 @@ void CON_Ticker (void)
     // console movement
     if (con_destlines!=con_curlines)
         CON_MoveConsole ();
-
 
     // clip the view, so that the part under the console is not drawn
     con_clipviewtop = -1;
@@ -536,7 +558,7 @@ void CON_Ticker (void)
     }
 
     // check if console ready for prompt
-    if (/*(con_curlines==con_destlines) &&*/ (con_destlines>=20))
+    if (con_destlines>=20)
         consoleready = true;
     else
         consoleready = false;
@@ -555,9 +577,9 @@ void CON_Ticker (void)
 //
 boolean CON_Responder (event_t *ev)
 {
-	// sequential completions à la 4dos
-	static char    completion[80];
-	static int     comskips,varskips;
+    // sequential completions à la 4dos
+    static char    completion[80];
+    static int     comskips,varskips;
 
     const char   *cmd;
     int           key;
@@ -574,36 +596,36 @@ boolean CON_Responder (event_t *ev)
 //
 //  check for console toggle key
 //
-	if (ev->type != ev_console)
-	{
-		if (key == gamecontrol[gc_console][0] ||
-			key == gamecontrol[gc_console][1] )
-		{
-			consoletoggle = true;
-			return true;
-		}
+    if (ev->type != ev_console)
+    {
+        if (key == gamecontrol[gc_console][0] ||
+            key == gamecontrol[gc_console][1] )
+        {
+            consoletoggle = true;
+            return true;
+        }
 
 //
 //  check other keys only if console prompt is active
 //
-		if (!consoleready && key < NUMINPUTS) // metzgermeister: boundary check !!
-		{
-		   if(bindtable[key])
-			{
-				COM_BufAddText (bindtable[key]);
-				COM_BufAddText ("\n");
-				return true;
-			}
-			return false;
-		}
+        if (!consoleready && key < NUMINPUTS) // metzgermeister: boundary check !!
+        {
+           if(bindtable[key])
+            {
+                COM_BufAddText (bindtable[key]);
+                COM_BufAddText ("\n");
+                return true;
+            }
+            return false;
+        }
 
-		// escape key toggle off console
-		if (key == KEY_ESCAPE)
-		{
-			consoletoggle = true;
-			return true;
-		}
-	}
+        // escape key toggle off console
+        if (key == KEY_ESCAPE)
+        {
+            consoletoggle = true;
+            return true;
+        }
+    }
 
     // command completion forward (tab) and backward (shift-tab)
     if (key == KEY_TAB)
@@ -892,24 +914,24 @@ void CON_Print (char *msg)
 // Lactozilla: Heritage
 static void CON_LogMessage(const char *msg)
 {
-	char txt[8192], *t;
-	const char *p = msg, *e = txt+sizeof (txt)-2;
+    char txt[8192], *t;
+    const char *p = msg, *e = txt+sizeof (txt)-2;
 
-	for (t = txt; *p != '\0'; p++)
-	{
-		if (*p == '\n' || *p >= ' ') // don't log or console print CON_Print's control characters
-			*t++ = *p;
+    for (t = txt; *p != '\0'; p++)
+    {
+        if (*p == '\n' || *p >= ' ') // don't log or console print CON_Print's control characters
+            *t++ = *p;
 
-		if (t >= e)
-		{
-			*t = '\0'; //end of string
-			I_OutputMsg("%s", txt); //print string
-			t = txt; //reset t pointer
-			memset(txt,'\0', sizeof (txt)); //reset txt
-		}
-	}
-	*t = '\0'; //end of string
-	I_OutputMsg("%s", txt);
+        if (t >= e)
+        {
+            *t = '\0'; //end of string
+            I_OutputMsg("%s", txt); //print string
+            t = txt; //reset t pointer
+            memset(txt,'\0', sizeof (txt)); //reset txt
+        }
+    }
+    *t = '\0'; //end of string
+    I_OutputMsg("%s", txt);
 }
 
 
@@ -928,10 +950,10 @@ void CONS_Printf (const char *fmt, ...)
     DEBFILE(txt);
 
     // write message in con text buffer
-	if (con_started)
-		CON_Print(txt);
+    if (con_started)
+        CON_Print(txt);
 
-	CON_LogMessage(txt);
+    CON_LogMessage(txt);
 
     // make sure new text is visible
     con_scrollup = 0;
@@ -1106,6 +1128,11 @@ static void CON_DrawConsole (void)
         else
 #endif
             CON_DrawBackpic (con_backpic,0,vid.width);   // picture as background
+
+#ifdef HERITAGE_CONNECTION_SCREEN
+        if (con_connectionscreen)
+            V_DrawFadeScreen();
+#endif
     }
     else
     {
