@@ -823,6 +823,7 @@ INT32 GIF_close(void)
 	{
 		Z_Free(gif_screen);
 		Z_Free(gif_lastscreen);
+		gif_screen = gif_lastscreen = NULL;
 	}
 
 	CONS_Printf("Animated gif closed; wrote %d frames\n", gif_frames);
