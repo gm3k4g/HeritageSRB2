@@ -664,6 +664,9 @@ void S_ChangeMusic( int                   musicnum,
 {
 	musicinfo_t*        music;
 
+	if (nomusic)
+		return;
+
 	if ( (musicnum <= mus_None) ||
 		 (musicnum >= NUMMUSIC) )
 	{
