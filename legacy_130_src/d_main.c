@@ -462,25 +462,24 @@ void D_Display (void)
 			}
 		}
 
-		//added:12-02-98: tilt view when marine dies... just for fun
-#ifdef PERSPCORRECT
-		if (gamestate == GS_LEVEL &&
-				 cv_perspcorr.value &&
-				 !camera.chase && (gamemap != TITLEMAP))
+		if (rendermode == render_soft && gamestate == GS_LEVEL && !camera.chase)
 		{
-			I_ReadScreen (screens[2]);
-			V_DrawPerspView (screens[2], players[displayplayer].aiming);
-		}
+#ifdef PERSPCORRECT
+			if (cv_perspcorr.value && (gamemap != TITLEMAP))
+			{
+				I_ReadScreen (screens[2]);
+				V_DrawPerspView (screens[2], players[displayplayer].aiming);
+			}
 #endif
 #ifdef TILTVIEW
-		if (gamestate == GS_LEVEL &&
-			cv_tiltview.value &&
-			players[displayplayer].playerstate==PST_DEAD )
-		{
-			I_ReadScreen (screens[2]);
-			V_DrawTiltView (screens[2]);
-		}
+			//added:12-02-98: tilt view when marine dies... just for fun
+			if (cv_tiltview.value && players[displayplayer].playerstate==PST_DEAD)
+			{
+				I_ReadScreen (screens[2]);
+				V_DrawTiltView (screens[2]);
+			}
 #endif
+		}
 
 		// fullscreen with overlay
 		if (st_overlay && !automapactive &&

@@ -1452,10 +1452,6 @@ typedef struct {
 //
 //added:12-02-98:
 
-#ifdef HWRENDER
-void V_DrawTiltView (UINT8 *viewbuffer)  // don't touch direct video I'll find something..
-{}
-#else
 
 static modelvertex_t vertex[4];
 
@@ -1547,19 +1543,12 @@ void V_DrawTiltView (UINT8 *viewbuffer)
 		leftxfrac += xstep;
 		leftyfrac += ystep;
 	}
-
 }
-#endif
 
 //
 // Test 'scrunch perspective correction' tm (c) ect.
 //
 //added:05-04-98:
-
-#ifdef HWRENDER // not win32 only 19990829 by Kin
-void V_DrawPerspView (UINT8 *viewbuffer, int aiming)
-{}
-#else
 
 void V_DrawPerspView (UINT8 *viewbuffer, int aiming)
 {
@@ -1618,4 +1607,3 @@ void V_DrawPerspView (UINT8 *viewbuffer, int aiming)
 		source += vid.width;
 	}
 }
-#endif
