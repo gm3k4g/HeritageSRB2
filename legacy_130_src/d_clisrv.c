@@ -821,6 +821,7 @@ static void CL_Reset (void)
 	SV_ResetServer();
 
 	// reset game engine
+	viewangleoffset=0;
 	D_StartTitle ();
 }
 
@@ -1009,7 +1010,6 @@ void SV_ResetServer( void )
 
 	mynode=0;
 	cl_packetmissed=false;
-	viewangleoffset=0;
 
 	if( dedicated )
 	{
