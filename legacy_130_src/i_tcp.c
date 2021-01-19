@@ -346,13 +346,9 @@ static const char *SOCK_GetNodeAddress(INT32 node)
 {
 	if (node == 0)
 		return "self";
-#ifdef NONET
-	return NULL;
-#else
 	if (!nodeconnected[node])
 		return NULL;
 	return SOCK_AddrToStr(&clientaddress[node]);
-#endif
 }
 
 static boolean SOCK_cmpaddr(mysockaddr_t *a, mysockaddr_t *b, UINT8 mask)
@@ -937,7 +933,6 @@ static void SOCK_CloseSocket(void)
 
 void I_ShutdownTcpDriver(void)
 {
-#ifndef NONET
 	SOCK_CloseSocket();
 
 	CONS_Printf("I_ShutdownTcpDriver: ");
@@ -955,7 +950,6 @@ void I_ShutdownTcpDriver(void)
 #endif // __DJGPP__
 	CONS_Printf("shut down\n");
 	init_tcp_driver = false;
-#endif
 }
 
 int SOCK_NetMakeNodewPort (const char *address, const char *port)

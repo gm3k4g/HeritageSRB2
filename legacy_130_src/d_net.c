@@ -843,45 +843,49 @@ extern boolean HGetPacket (void)
 	if (!netgame || demoplayback)
 		return false;
 
-	// Lactozilla: Heritage
-	if (I_NetGet)
-		I_NetGet();
-	else
-		I_Error("I_NetGet not set");
-
-	if (doomcom->remotenode == -1)
-		return false;
-
-	getbytes+=(packetheaderlength+doomcom->datalength); // for stat
-
-	if (doomcom->remotenode >= MAXNETNODES)
+	while (true)
 	{
-		DEBFILE(va("receive packet from node %d !\n", doomcom->remotenode));
-		return false;
-	}
+		if (I_NetGet)
+			I_NetGet();
+		else
+			I_Error("I_NetGet not set");
 
-	lasttimepacketreceived[doomcom->remotenode] = I_GetTime(); // Tails 03-30-2001
+		if (doomcom->remotenode == -1) // No packet received
+			return false;
 
-	if (netbuffer->checksum != NetbufferChecksum ())
-	{
-		DEBFILE("Bad packet checksum\n");
-		return false;
-	}
+		getbytes+=(packetheaderlength+doomcom->datalength); // for stat
+
+		if (doomcom->remotenode >= MAXNETNODES)
+		{
+			DEBFILE(va("receive packet from node %d !\n", doomcom->remotenode));
+			continue;
+		}
+
+		lasttimepacketreceived[doomcom->remotenode] = I_GetTime(); // Tails 03-30-2001
+
+		if (netbuffer->checksum != NetbufferChecksum ())
+		{
+			DEBFILE("Bad packet checksum\n");
+			D_FreeNodeNum(doomcom->remotenode);
+			continue;
+		}
 
 #ifdef DEBUGFILE
-	if (debugfile)
-		DebugPrintpacket("GET");
+		if (debugfile)
+			DebugPrintpacket("GET");
 #endif
 
-	// proceed the ack and ackreturn field
-	if(!Processackpak())
-		return false;    // discated (duplicated)
+		// proceed the ack and ackreturn field
+		if(!Processackpak())
+			continue;    // discated (duplicated)
 
-	// a packet with just ackreturn
-	if( netbuffer->packettype == NOTHING)
-	{
-		GotAcks();
-		return false;
+		// a packet with just ackreturn
+		if( netbuffer->packettype == NOTHING)
+		{
+			GotAcks();
+			continue;
+		}
+		break;
 	}
 
 	return true;

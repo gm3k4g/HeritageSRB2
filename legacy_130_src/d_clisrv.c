@@ -1247,6 +1247,9 @@ boolean SV_SpawnServer( void )
 		serverrunning = true;
 		SV_ResetServer();
 
+		if (netgame && I_NetOpenSocket)
+			I_NetOpenSocket();
+
 		// server just connect to itself
 		if( !dedicated )
 			CL_ConnectToServer();
