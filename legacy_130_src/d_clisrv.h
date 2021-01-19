@@ -223,7 +223,6 @@ extern boolean   drone;
 
 extern consvar_t cv_allownewplayer;
 extern consvar_t cv_maxplayers;
-extern boolean   notimecheck; // check file time through network ?
 
 // used in d_net, the only depandence
 int    ExpandTics (int low);

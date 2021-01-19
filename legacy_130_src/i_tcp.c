@@ -449,14 +449,14 @@ boolean SOCK_Get(void)
 			{
 				memcpy(&clientaddress[j], &fromaddress, fromlen);
 				nodesocket[j] = mysockets[n];
-				CONS_Printf(va("New node detected: node:%d address:%s\n", j, SOCK_GetNodeAddress(j)));
+				DEBFILE(va("New node detected: node:%d address:%s\n", j, SOCK_GetNodeAddress(j)));
 				doomcom->remotenode = (INT16)j; // good packet from a game player
 				doomcom->datalength = (INT16)c;
 
 				return true;
 			}
 			else
-				CONS_Printf("New node detected: No more free slots\n");
+				DEBFILE("New node detected: No more free slots\n");
 		}
 	}
 
@@ -632,7 +632,7 @@ static SOCKET_TYPE UDP_Bind(int family, struct sockaddr *addr, socklen_t addrlen
 #endif
 
 	straddr.any = *addr;
-	I_OutputMsg("Binding to %s\n", SOCK_AddrToStr(&straddr));
+	I_OutputMsg("UDP_Bind: Binding to %s\n", SOCK_AddrToStr(&straddr));
 
 	if (family == AF_INET)
 	{
@@ -649,7 +649,7 @@ static SOCKET_TYPE UDP_Bind(int family, struct sockaddr *addr, socklen_t addrlen
 		opts = (socklen_t)sizeof(opt);
 		if (setsockopt(s, SOL_SOCKET, SO_BROADCAST, (char *)&opt, opts))
 		{
-			CONS_Printf("Could not get broadcast rights\n"); // I do not care anymore
+			CONS_Printf("UDP_Bind: Could not get broadcast rights\n"); // I do not care anymore
 		}
 	}
 #ifdef HAVE_IPV6
@@ -667,7 +667,7 @@ static SOCKET_TYPE UDP_Bind(int family, struct sockaddr *addr, socklen_t addrlen
 		opts = (socklen_t)sizeof(opt);
 		if (setsockopt(s, SOL_SOCKET, IPV6_V6ONLY, (char *)&opt, opts))
 		{
-			CONS_Printf("Could not limit IPv6 bind\n"); // I do not care anymore
+			CONS_Printf("UDP_Bind: Could not limit IPv6 bind\n"); // I do not care anymore
 		}
 #endif
 	}
@@ -708,7 +708,7 @@ static SOCKET_TYPE UDP_Bind(int family, struct sockaddr *addr, socklen_t addrlen
 	}
 
 	if (getsockname(s, (struct sockaddr *)&sin, &len) == -1)
-		CONS_Printf("Failed to get port number\n");
+		CONS_Printf("UDP_Bind: Failed to get port number\n");
 	else
 		current_port = (UINT16)ntohs(sin.sin_port);
 
@@ -961,7 +961,7 @@ int SOCK_NetMakeNodewPort (const char *address, const char *port)
 	if (!port || !port[0])
 		port = DEFAULTPORT;
 
-	CONS_Printf(va("Creating new node: %s@%s\n", address, port));
+	DEBFILE(va("Creating new node: %s@%s\n", address, port));
 
 	memset (&hints, 0x00, sizeof (hints));
 	hints.ai_flags = 0;

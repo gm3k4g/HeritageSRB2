@@ -414,8 +414,7 @@ static boolean CL_SendJoin()
 
 	if (drone)
 		netbuffer->u.clientcfg.localplayers=0;
-	else
-	if (cv_splitscreen.value)
+	else if (cv_splitscreen.value)
 		netbuffer->u.clientcfg.localplayers=2;
 	else
 		netbuffer->u.clientcfg.localplayers=1;
@@ -812,7 +811,8 @@ static void CL_Reset (void)
 		D_FreeNodeNum(servernode);
 		nodeingame[(UINT8)servernode]=false;
 	}
-	D_CloseConnection();         // netgame=false
+
+	D_CloseConnection();
 	servernode=0;
 	server=true;
 	doomcom->numnodes=1;
@@ -820,8 +820,15 @@ static void CL_Reset (void)
 	SV_StopServer();
 	SV_ResetServer();
 
+	// Disable drone mode
+	if (drone)
+	{
+		drone=false;
+		viewangleoffset=0;
+		VID_DefaultWindowTitle();
+	}
+
 	// reset game engine
-	viewangleoffset=0;
 	D_StartTitle ();
 }
 
@@ -941,39 +948,43 @@ void Got_AddPlayer(char **p,int playernum);
 // called one time at init
 void D_ClientServerInit (void)
 {
-	DEBFILE(va("- - -== Doom LEGACY v%i.%i.%i"VERSIONSTRING" debugfile ==- - -\n",VERSION/100,VERSION%100,SUBVERSION));
-
-//	Remove this Tails 06-06-2001
-//    notimecheck = M_CheckParm("-notime");
+	DEBFILE(va("- - -== Doom LEGACY v%i.%i.%i"VERSIONSTRING" debugfile ==- - -\n",VERSION/100,VERSION%100,SUBVERSION))
 
 	if(M_CheckParm("-left"))
 	{
 		drone = true;
 		viewangleoffset = ANG90;
+#ifdef HERITAGE_THREE_SCREEN_MODE
+		VID_SetWindowTitle("Heritage (three window mode, left screen)");
+#endif
 	}
-	if(M_CheckParm("-right"))
+	else if(M_CheckParm("-right"))
 	{
 		drone = true;
 		viewangleoffset = -ANG90;
+#ifdef HERITAGE_THREE_SCREEN_MODE
+		VID_SetWindowTitle("Heritage (three window mode, right screen)");
+#endif
 	}
+
 	dedicated=M_CheckParm("-dedicated")!=0;
 
-		RegisterNetXCmd(XD_EXIT,ExecuteExitCmd);
-		RegisterNetXCmd(XD_QUIT,ExecuteQuitCmd);
-		COM_AddCommand("getplayernum",Command_GetPlayerNum);
-		COM_AddCommand("kick",Command_Kick);
+	RegisterNetXCmd(XD_EXIT,ExecuteExitCmd);
+	RegisterNetXCmd(XD_QUIT,ExecuteQuitCmd);
+	RegisterNetXCmd(XD_KICK,Got_KickCmd);
+	RegisterNetXCmd(XD_ADDPLAYER,Got_AddPlayer);
+
+	COM_AddCommand("getplayernum",Command_GetPlayerNum);
+	COM_AddCommand("kick",Command_Kick);
 	COM_AddCommand("connect",Command_connect);
 
-		RegisterNetXCmd(XD_KICK,Got_KickCmd);
-		RegisterNetXCmd(XD_ADDPLAYER,Got_AddPlayer);
-		CV_RegisterVar (&cv_allownewplayer);
-		CV_RegisterVar (&cv_maxplayers);
+	CV_RegisterVar (&cv_allownewplayer);
+	CV_RegisterVar (&cv_maxplayers);
 
 	gametic = 0;
 
 	// do not send anything before the real begin
 	SV_StopServer();
-
 	SV_ResetServer();
 }
 

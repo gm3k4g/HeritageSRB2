@@ -1555,6 +1555,11 @@ void ST_overlayDrawer (int playernum)
 	char   c;
 	int    i;
 
+#ifdef HERITAGE_THREE_SCREEN_MODE
+	if (drone)
+		return;
+#endif
+
 	cmds = cv_stbaroverlay.zstring;
 
 	while ((c=*cmds++))

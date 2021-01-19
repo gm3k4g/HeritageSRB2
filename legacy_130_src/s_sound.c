@@ -333,6 +333,11 @@ void S_StartSoundAtVolume( void*         origin_p,
 	if (! cv_playsoundsifunfocused.value && window_notinfocus)
 		return;
 
+#ifdef HERITAGE_THREE_SCREEN_MODE
+	if (drone)
+		return;
+#endif
+
 	// Debug.
 	/*fprintf( stderr,
 			 "S_StartSoundAtVolume: playing sound %d (%s)\n",
@@ -666,6 +671,11 @@ void S_ChangeMusic( int                   musicnum,
 
 	if (nomusic)
 		return;
+
+#ifdef HERITAGE_THREE_SCREEN_MODE
+	if (drone)
+		return;
+#endif
 
 	if ( (musicnum <= mus_None) ||
 		 (musicnum >= NUMMUSIC) )

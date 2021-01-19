@@ -945,6 +945,17 @@ void D_SetDoomcom(void)
 	doomcom->extratics = 0;
 }
 
+static void D_InternalNet(void)
+{
+	I_NetGet           = Internal_Get;
+	I_NetSend          = Internal_Send;
+	I_NetCanSend       = NULL;
+	I_NetFreeNodenum   = Internal_FreeNodenum;
+	I_NetMakeNodewPort = NULL;
+	I_NetOpenSocket    = NULL;
+	I_NetCloseSocket   = NULL;
+}
+
 //
 // D_CheckNetGame
 // Works out player numbers among the net participants
@@ -958,13 +969,7 @@ boolean D_CheckNetGame(void)
 
 	statstarttic = I_GetTime();
 
-	I_NetGet           = Internal_Get;
-	I_NetSend          = Internal_Send;
-	I_NetCanSend       = NULL;
-	I_NetFreeNodenum   = Internal_FreeNodenum;
-	I_NetMakeNodewPort = NULL;
-	I_NetOpenSocket    = NULL;
-	I_NetCloseSocket   = NULL;
+	D_InternalNet();
 
 	hardware_MAXPACKETLENGTH = MAXPACKETLENGTH;
 	net_bandwidth = 3000;
@@ -1065,13 +1070,5 @@ extern void D_CloseConnection( void )
 	if (I_NetCloseSocket)
 		I_NetCloseSocket();
 
-	CONS_Printf("D_CloseConnection: closed\n");
-
-	I_NetGet = NULL;
-	I_NetSend = NULL;
-	I_NetCanSend = NULL;
-	I_NetOpenSocket = NULL;
-	I_NetCloseSocket = NULL;
-	I_NetMakeNodewPort = NULL;
-	I_NetFreeNodenum = NULL;
+	D_InternalNet();
 }

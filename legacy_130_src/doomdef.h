@@ -131,6 +131,7 @@
 #define HERITAGE_SCREENSHOT_COLORPROFILE // Enables color profile option for screenshots and movies, 2.2 port
 #define HERITAGE_MOUSE_GRAB              // Mouse grab port from 2.2
 #define HERITAGE_PAUSE_BEHAVIOR          // Modern pause behavior (instead of actually pausing the game)
+#define HERITAGE_THREE_SCREEN_MODE       // Heritage's three screen mode behavior
 #define HERITAGE_PLAYER_MOVEMENT         // Modern player movement code port from 2.2
 #define HERITAGE_DIRECTIONCHAR           // directionchar port from 2.2
 #define HERITAGE_ENEMY_COLLISION         // Fixes enemy collision
@@ -185,9 +186,10 @@ extern UINT8    demoversion;
 // Lactozilla: Title screen level
 #define TITLEMAP        33
 
-#define RING_DIST	512*FRACUNIT	// Used for ring shield. Change this to affect
-									// how close you need to be to a ring to attract
-									// it. Tails
+// Used for ring shield. Change this to affect
+// how close you need to be to a ring to attract
+// it. Tails
+#define RING_DIST	512*FRACUNIT
 
 // Name of local directory for config files and savegames
 #ifdef LINUX

@@ -1214,6 +1214,17 @@ INT32 VID_SetMode(INT32 modeNum)
 	return SDL_TRUE;
 }
 
+static const char *Impl_DefaultWindowName(void)
+{
+	return va("Heritage (%s, %s %s)", VERSIONSTRING, compdate, comptime, compbranch, comprevision);
+}
+
+static void Impl_SetWindowName(const char *title)
+{
+	if (window)
+		SDL_SetWindowTitle(window, title);
+}
+
 static SDL_bool Impl_CreateWindow(SDL_bool fullscreen)
 {
 	int flags = 0;
@@ -1233,7 +1244,7 @@ static SDL_bool Impl_CreateWindow(SDL_bool fullscreen)
 #endif
 
 	// Create a window
-	window = SDL_CreateWindow(va("Heritage (%s, %s %s)", VERSIONSTRING, compdate, comptime, compbranch, comprevision), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, realwidth, realheight, flags);
+	window = SDL_CreateWindow(Impl_DefaultWindowName(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, realwidth, realheight, flags);
 
 	if (window == NULL)
 	{
@@ -1246,16 +1257,15 @@ static SDL_bool Impl_CreateWindow(SDL_bool fullscreen)
 	return Impl_CreateContext();
 }
 
-/*
-static void Impl_SetWindowName(const char *title)
+void VID_SetWindowTitle(const char *title)
 {
-	if (window == NULL)
-	{
-		return;
-	}
-	SDL_SetWindowTitle(window, title);
+	Impl_SetWindowName(title);
 }
-*/
+
+void VID_DefaultWindowTitle(void)
+{
+	Impl_SetWindowName(Impl_DefaultWindowName());
+}
 
 static void Impl_SetWindowIcon(void)
 {

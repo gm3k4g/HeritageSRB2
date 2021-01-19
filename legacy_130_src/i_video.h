@@ -76,5 +76,8 @@ const char *VID_GetModeName(INT32 modeNum);
 INT32 VID_GetModeForSize(INT32 w, INT32 h);
 void VID_PrepareModeList(void);
 
+void VID_SetWindowTitle(const char *title);
+void VID_DefaultWindowTitle(void);
+
 
 #endif

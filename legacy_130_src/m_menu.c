@@ -2135,26 +2135,21 @@ void M_QuitResponse(int ch)
 
 	if (ch != 'y')
 		return;
+
 	if (!netgame)
 	{
 		//added:12-02-98: quitsounds are much more fun than quitsounds2 (NOT!! -Tails)
-		//if (gamemode == commercial)
-	   //     S_StartSound(NULL,quitsounds2[(gametic>>2)&7]);
-	   // else
-			S_StartSound(NULL,quitsounds2[(gametic>>2)&7]); // Use quitsounds2, not quitsounds Tails 11-09-99
+		S_StartSound(NULL,quitsounds2[(gametic>>2)&7]); // Use quitsounds2, not quitsounds Tails 11-09-99
 
 		//added:12-02-98: do that instead of I_WaitVbl which does not work
-//        if(!nosound)
-//        {
-			time = I_GetTime() + TICRATE*4; // Shortened the quit time, used to be 2 seconds Tails 03-26-2001
-			while (time > I_GetTime())
-			{
-				V_DrawScaledPatch (0,0,0,W_CachePatchName("DEMOQUIT",PU_CACHE)); // Demo 3 Quit Screen Tails 06-16-2001
-				I_FinishUpdate (); // Update the screen with the image Tails 06-19-2001
-			}
-//        }
-		//I_WaitVBL(105);
+		time = I_GetTime() + TICRATE*4; // Shortened the quit time, used to be 2 seconds Tails 03-26-2001
+		while (time > I_GetTime())
+		{
+			V_DrawScaledPatch (0,0,0,W_CachePatchName("DEMOQUIT",PU_CACHE)); // Demo 3 Quit Screen Tails 06-16-2001
+			I_FinishUpdate (); // Update the screen with the image Tails 06-19-2001
+		}
 	}
+
 	I_Quit ();
 }
 
@@ -2163,11 +2158,11 @@ void M_QuitResponse(int ch)
 
 void M_QuitDOOM(int choice)
 {
-  // We pick index 0 which is language sensitive,
-  //  or one at random, between 1 and maximum number.
-  static char s[200];
-  sprintf(s,text[DOSY_NUM],text[ QUITMSG_NUM+(gametic%NUM_QUITMESSAGES)]);
-  M_StartMessage( s,M_QuitResponse,true);
+	// We pick index 0 which is language sensitive,
+	//  or one at random, between 1 and maximum number.
+	static char s[200];
+	sprintf(s,text[DOSY_NUM],text[ QUITMSG_NUM+(gametic%NUM_QUITMESSAGES)]);
+	M_StartMessage( s,M_QuitResponse,true);
 }
 
 
