@@ -818,15 +818,12 @@ INT32 GIF_close(void)
 
 	if (gif_headerpalette)
 		Z_Free(gif_headerpalette);
-	gif_headerpalette = NULL;
 
 	if (gif_allocscreen)
+	{
 		Z_Free(gif_screen);
-	gif_screen = NULL;
-
-	if (gif_lastscreen)
 		Z_Free(gif_lastscreen);
-	gif_lastscreen = NULL;
+	}
 
 	CONS_Printf("Animated gif closed; wrote %d frames\n", gif_frames);
 	return 1;
