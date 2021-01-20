@@ -785,7 +785,7 @@ void CV_SendModifiedNetVars(void)
         }
 }
 
-void Setvalue (consvar_t *var, const char *valstr);
+void Setvalue (consvar_t *var, const char *valstr, boolean stealth);
 
 //  Register a variable, that can be used later at the console
 //
@@ -825,7 +825,7 @@ void CV_RegisterVar (consvar_t *variable)
     if (variable->flags & CV_NOINIT)
         variable->flags &=~CV_CALL;
 
-    Setvalue(variable,variable->defaultvalue);
+    Setvalue(variable,variable->defaultvalue,false);
 
     if (variable->flags & CV_NOINIT)
         variable->flags |= CV_CALL;
@@ -872,7 +872,7 @@ const char *CV_CompleteVar (char *partial, int skips)
 
 // set value to the variable, no check only for internal use
 //
-void Setvalue (consvar_t *var, const char *valstr)
+void Setvalue (consvar_t *var, const char *valstr, boolean stealth)
 {
 	char *valstrbuf = Z_StrDup (valstr);
 
@@ -956,7 +956,7 @@ finish:
     DEBFILE(va("%s set to %s\n",var->name,var->string));
     var->flags |= CV_MODIFIED;
     // raise 'on change' code
-    if (var->flags & CV_CALL)
+    if (var->flags & CV_CALL && !stealth)
         var->func ();
 }
 
@@ -980,13 +980,13 @@ void Got_NetVar(char **p,int playernum)
         CONS_Printf("Netvar not found\n");
         return;
     }
-    Setvalue(cvar,svalue);
+    Setvalue(cvar,svalue,false);
 }
 
 
 //  does as if "<varname> <value>" is entered at the console
 //
-void CV_Set (consvar_t *var, const char *value)
+static void SetCVAR (consvar_t *var, const char *value, boolean stealth)
 {
     //changed = strcmp(var->string, value);
 #ifdef PARANOIA
@@ -1022,18 +1022,38 @@ void CV_Set (consvar_t *var, const char *value)
             return;
         }
         else
-        Setvalue(var,value);
+            Setvalue(var,value,stealth);
 }
 
 
 //  Expands value to string before calling CV_Set ()
 //
-void CV_SetValue (consvar_t *var, int value)
+static void SetCVARValue (consvar_t *var, int value, boolean stealth)
 {
     char    val[32];
 
     sprintf (val, "%d", value);
-    CV_Set (var, val);
+    SetCVAR (var, val, stealth);
+}
+
+void CV_Set (consvar_t *var, const char *value)
+{
+    SetCVAR(var, value, false);
+}
+
+void CV_SetValue (consvar_t *var, int value)
+{
+    SetCVARValue(var, value, false);
+}
+
+void CV_StealthSet (consvar_t *var, const char *value)
+{
+    SetCVAR(var, value, true);
+}
+
+void CV_StealthSetValue (consvar_t *var, int value)
+{
+    SetCVARValue(var, value, true);
 }
 
 void CV_AddValue (consvar_t *var, int increment)

@@ -165,7 +165,7 @@ boolean         usergame;               // ok to save / end game
 boolean         timingdemo;             // if true, exit with report on completion
 boolean         nodrawers;              // for comparative timing purposes
 boolean         noblit;                 // for comparative timing purposes
-UINT32           demostarttime;              // for comparative timing purposes
+UINT32          demostarttime;              // for comparative timing purposes
 
 boolean         viewactive;
 
@@ -180,25 +180,28 @@ UINT8           secondarydisplayplayer; // for splitscreen
 UINT8           statusbarplayer;        // player who's statusbar is displayed
 										// (for spying with F12)
 
-UINT32           gametic;
-UINT32           levelstarttic;          // gametic at level start
+UINT32          gametic;
+UINT32          levelstarttic;          // gametic at level start
 int             totalkills, totalitems, totalsecret, totalrings;    // for intermission Tails 08-11-2001
 
 char            demoname[32];
 boolean         demorecording;
 boolean         demoplayback;
-UINT8*           demobuffer;
-UINT8*           demo_p;
-UINT8*           demoend;
+UINT8*          demobuffer;
+UINT8*          demo_p;
+UINT8*          demoend;
 boolean         singledemo;             // quit after playing a demo from cmdline
 boolean         precache = true;        // if true, load all graphics at start
 
 wbstartstruct_t wminfo;                 // parms for world map / intermission
 
-UINT8*           savebuffer;
+UINT8*          savebuffer;
 
-void ShowMessage_OnChange(void);
-void Analog_OnChange(void); // Analog Test Tails 06-11-2001
+static void Heritage_SendWeaponPref(void);
+
+static void ShowMessage_OnChange(void);
+static void Analog_OnChange(void); // Analog Test Tails 06-11-2001
+static void ChaseCam_OnChange(void);
 
 CV_PossibleValue_t showmessages_cons_t[]={{0,"Off"},{1,"On"},{2,"Not All"},{0,NULL}};
 CV_PossibleValue_t crosshair_cons_t[]   ={{0,"Off"},{1,"Cross"},{2,"Angle"},{3,"Point"},{0,NULL}};
@@ -212,13 +215,29 @@ consvar_t cv_alwaysfreelook2= {"alwaysmlook2","0",CV_SAVE,CV_OnOff};
 consvar_t cv_showmessages   = {"showmessages","1",CV_SAVE | CV_CALL | CV_NOINIT,showmessages_cons_t,ShowMessage_OnChange};
 consvar_t cv_mousemove      = {"mousemove"   ,"1",CV_SAVE,CV_OnOff};
 consvar_t cv_mousemove2     = {"mousemove2"  ,"1",CV_SAVE,CV_OnOff};
-consvar_t cv_analog			= {"analog"		 ,"0",CV_NETVAR | CV_CALL,CV_OnOff, Analog_OnChange}; // Analog Test Tails 06-10-2001
+consvar_t cv_analog         = {"analog"      ,"0",CV_NETVAR | CV_CALL,CV_OnOff,Analog_OnChange}; // Analog Test Tails 06-10-2001
+consvar_t cv_chasecam       = {"chasecam"    ,"1",CV_CALL,CV_OnOff,ChaseCam_OnChange}; // Tails
+consvar_t cv_homing         = {"homing"      ,"0",0,CV_OnOff}; // Tails 07-02-2001
+consvar_t cv_nights         = {"nights"      ,"0",0,CV_OnOff}; // Tails 07-02-2001
+
+void ChaseCam_OnChange(void)
+{
+#ifdef HERITAGE_WEAPONPREF
+	if (netgame)
+		SendWeaponPref();
+#endif
+}
 
 // Lactozilla: Heritage
-consvar_t cv_heritage_playermovement = {"heritage_playermovement", "0", CV_SAVE, CV_OnOff};
-consvar_t cv_heritage_directionchar  = {"heritage_directionchar", "0", CV_SAVE, CV_OnOff};
+consvar_t cv_heritage_playermovement = {"heritage_playermovement", "0", CV_SAVE | CV_CALL | CV_NOINIT, CV_OnOff, Heritage_SendWeaponPref};
+consvar_t cv_heritage_directionchar  = {"heritage_directionchar", "0", CV_SAVE | CV_CALL | CV_NOINIT, CV_OnOff, Heritage_SendWeaponPref};
 
-
+static void Heritage_SendWeaponPref(void)
+{
+#ifdef HERITAGE_WEAPONPREF
+	SendWeaponPref();
+#endif
+}
 
 #if MAXPLAYERS>32
 #error please update "player_name" table using the new value for MAXPLAYERS

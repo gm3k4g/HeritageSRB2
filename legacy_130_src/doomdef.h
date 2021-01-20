@@ -136,6 +136,7 @@
 #define HERITAGE_THREE_SCREEN_MODE       // Heritage's three screen mode behavior
 #define HERITAGE_PLAYER_MOVEMENT         // Modern player movement code port from 2.2
 #define HERITAGE_DIRECTIONCHAR           // directionchar port from 2.2
+#define HERITAGE_WEAPONPREF              // Send analog / directionchar / playermovement over the network
 #define HERITAGE_ENEMY_COLLISION         // Fixes enemy collision
 #define HERITAGE_ENEMY_STOP_AT_DEATH     // Stops enemies from moving when they are destroyed
 #endif // NOHERITAGE

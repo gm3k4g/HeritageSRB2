@@ -101,8 +101,6 @@
 #include "hardware/hw_main.h"
 #endif
 
-extern consvar_t cv_chasecam; // declare the cam var! Tails 01-06-2000
-
 //
 // MAP related Lookup tables.
 // Store VERTEXES, LINEDEFS, SIDEDEFS, etc.

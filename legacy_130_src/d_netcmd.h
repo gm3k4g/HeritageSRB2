@@ -99,6 +99,11 @@ extern consvar_t   cv_preferredteam; // Tails 07-22-2001
 extern consvar_t   cv_heritage_playermovement;
 extern consvar_t   cv_heritage_directionchar;
 
+extern consvar_t   cv_chasecam; // declare the cam var! Tails 01-06-2000
+extern consvar_t   cv_homing; // Tails 07-02-2001
+extern consvar_t   cv_nights; // Tails 07-02-2001
+extern consvar_t   cv_numsnow; // Tails 12-25-2001
+
 extern consvar_t   cv_netstat;
 extern consvar_t   cv_translucency;
 extern consvar_t   cv_splats;
@@ -124,5 +129,9 @@ typedef enum {
 // add game commands, needs cleanup
 void D_RegisterClientCommands (void);
 void D_SendPlayerConfig(void);
+
+void SendWeaponPref(void);
+void SendNameAndColor(void);
+void SendNameAndColor2(void);
 
 #endif

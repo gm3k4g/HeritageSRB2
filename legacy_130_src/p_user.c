@@ -125,7 +125,23 @@ fixed_t P_ReturnThrustY ( mobj_t*       mo,
 	return FixedMul(move,finesine[angle]);
 }
 
+boolean Heritage_PlayerMovement(player_t *player)
+{
+#ifdef HERITAGE_WEAPONPREF
+	return player->heritagemovement;
+#else
+	return !!(cv_heritage_playermovement.value);
+#endif
+}
 
+boolean Heritage_DirectionChar(player_t *player)
+{
+#ifdef HERITAGE_WEAPONPREF
+	return player->directionchar;
+#else
+	return !!(cv_heritage_directionchar.value);
+#endif
+}
 
 //
 // P_CalcHeight
@@ -217,9 +233,6 @@ void P_CalcHeight (player_t* player)
 
 extern int ticruned,ticmiss;
 
-extern consvar_t cv_homing; // Tails 07-02-2001
-extern consvar_t cv_nights; // Tails 07-02-2001
-extern consvar_t cv_numsnow; // Tails 12-25-2001
 //
 // P_MovePlayer
 //
@@ -260,7 +273,7 @@ void P_MovePlayer (player_t* player)
 	cmd = &player->cmd;
 
 #ifdef HERITAGE_PLAYER_MOVEMENT
-	if (cv_heritage_playermovement.value)
+	if (Heritage_PlayerMovement(player))
 	{
 		totalthrust.x = totalthrust.y = totalthrust.z = 0;
 
@@ -327,7 +340,7 @@ void P_MovePlayer (player_t* player)
 	player->speed = P_AproxDistance(player->rmomx, player->rmomy)>>FRACBITS;
 
 #ifdef HERITAGE_PLAYER_MOVEMENT
-	if (cv_heritage_playermovement.value)
+	if (Heritage_PlayerMovement(player))
 	{
 		// Monster Iestyn - 04-11-13
 		// Quadrants are stupid, excessive and broken, let's do this a much simpler way!
@@ -409,7 +422,7 @@ void P_MovePlayer (player_t* player)
 			normalspeed = 26; // Normal ground
 
 #ifdef HERITAGE_PLAYER_MOVEMENT
-			if (cv_heritage_playermovement.value)
+			if (Heritage_PlayerMovement(player))
 				break;
 #endif
 
@@ -479,7 +492,7 @@ void P_MovePlayer (player_t* player)
 			normalspeed = 17; // Normal ground
 
 #ifdef HERITAGE_PLAYER_MOVEMENT
-			if (cv_heritage_playermovement.value)
+			if (Heritage_PlayerMovement(player))
 				break;
 #endif
 
@@ -530,7 +543,7 @@ void P_MovePlayer (player_t* player)
 			normalspeed = 21; // Normal ground
 
 #ifdef HERITAGE_PLAYER_MOVEMENT
-			if (cv_heritage_playermovement.value)
+			if (Heritage_PlayerMovement(player))
 				break;
 #endif
 
@@ -591,7 +604,7 @@ void P_MovePlayer (player_t* player)
 			normalspeed = 11; // Normal ground
 
 #ifdef HERITAGE_PLAYER_MOVEMENT
-			if (cv_heritage_playermovement.value)
+			if (Heritage_PlayerMovement(player))
 				break;
 #endif
 
@@ -606,7 +619,7 @@ void P_MovePlayer (player_t* player)
 			normalspeed = 34; // Normal ground
 
 #ifdef HERITAGE_PLAYER_MOVEMENT
-			if (cv_heritage_playermovement.value)
+			if (Heritage_PlayerMovement(player))
 				break;
 #endif
 
@@ -621,7 +634,7 @@ void P_MovePlayer (player_t* player)
 			normalspeed = 6; // Normal ground
 
 #ifdef HERITAGE_PLAYER_MOVEMENT
-			if (cv_heritage_playermovement.value)
+			if (Heritage_PlayerMovement(player))
 				break;
 #endif
 
@@ -635,7 +648,7 @@ void P_MovePlayer (player_t* player)
 	}
 
 #ifdef HERITAGE_PLAYER_MOVEMENT
-	if (cv_heritage_playermovement.value)
+	if (Heritage_PlayerMovement(player))
 	{
 		if(player->powers[pw_strength] || player->powers[pw_super]) // do you have super sneakers? Tails 02-28-2000
 		{
@@ -3200,7 +3213,7 @@ static void P_DeezNux (player_t *player)
 	if (player->exiting // no control, no modification
 	|| cv_nights.value)
 		;
-	else if (!cv_heritage_directionchar.value
+	else if (!Heritage_DirectionChar(player)
 	|| (player->climbing) // stuff where the direction is forced at all times
 	|| cv_gametype.value) // no firing rings in directions your player isn't aiming
 		player->drawangle = player->mo->angle;

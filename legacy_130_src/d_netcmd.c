@@ -139,10 +139,6 @@ boolean P_TeleportMove(); // Tails 10-02-2001
 //                           CLIENT VARIABLES
 // =========================================================================
 
-void SendWeaponPref(void);
-void SendNameAndColor(void);
-void SendNameAndColor2(void);
-
 // these two are just meant to be saved to the config
 consvar_t cv_playername           = {"name"                ,"sonic"       ,CV_CALL | CV_NOINIT,NULL,SendNameAndColor};
 consvar_t cv_playercolor          = {"color"               ,"7"        ,CV_CALL | CV_NOINIT,Color_cons_t,SendNameAndColor}; // Don't save Tails 03-26-2001
@@ -625,9 +621,52 @@ void Got_NameAndcolor(char **cp,int playernum)
 	}
 }
 
+#ifdef HERITAGE_WEAPONPREF
+enum
+{
+	WEAPONPREF_DIRECTIONCHAR  = 1,
+	WEAPONPREF_PLAYERMOVEMENT = 1<<1,
+	WEAPONPREF_CHASECAM       = 1<<2
+};
+
+static UINT8 Heritage_BuildWeaponPref(void)
+{
+	UINT8 pref = 0;
+
+	if (cv_heritage_playermovement.value)
+		pref |= WEAPONPREF_PLAYERMOVEMENT;
+	if (cv_heritage_directionchar.value)
+		pref |= WEAPONPREF_DIRECTIONCHAR;
+	if (cv_chasecam.value)
+		pref |= WEAPONPREF_CHASECAM;
+
+	return pref;
+}
+
+static void Heritage_ReadWeaponPref(UINT8 pref,int playernum)
+{
+	player_t *player = &players[playernum];
+
+	player->heritagemovement = player->directionchar = false;
+
+	if (pref & WEAPONPREF_PLAYERMOVEMENT)
+		player->heritagemovement = true;
+	if (pref & WEAPONPREF_DIRECTIONCHAR)
+		player->directionchar = true;
+
+	if (drone)
+	{
+		if (pref & WEAPONPREF_CHASECAM)
+			CV_StealthSetValue(&cv_chasecam, 1);
+		else
+			CV_StealthSetValue(&cv_chasecam, 0);
+	}
+}
+#endif
+
 void SendWeaponPref(void)
 {
-	char buf[NUMWEAPONS+2];
+	char buf[NUMWEAPONS+3];
 
 	if(strlen(cv_weaponpref.string)!=NUMWEAPONS)
 	{
@@ -637,18 +676,35 @@ void SendWeaponPref(void)
 	buf[0]=cv_originalweaponswitch.value;
 	memcpy(buf+1,cv_weaponpref.string,NUMWEAPONS);
 	buf[1+NUMWEAPONS]=cv_autoaim.value;
-	SendNetXCmd(XD_WEAPONPREF,buf,NUMWEAPONS+2);
+
+#ifdef HERITAGE_WEAPONPREF
+	buf[2+NUMWEAPONS] = Heritage_BuildWeaponPref();
+#else
+	buf[2+NUMWEAPONS] = 0;
+#endif
+
+	SendNetXCmd(XD_WEAPONPREF,buf,NUMWEAPONS+3);
+
 	// FIXME : the split screen player have the same weapon pref of the first player
 	if(cv_splitscreen.value)
-		SendNetXCmd2(XD_WEAPONPREF,buf,NUMWEAPONS+2);
+		SendNetXCmd2(XD_WEAPONPREF,buf,NUMWEAPONS+3);
 }
 
 void Got_WeaponPref(char **cp,int playernum)
 {
+#ifdef HERITAGE_WEAPONPREF
+	UINT8 h_pref;
+#endif
+
 	players[playernum].originalweaponswitch = *(*cp)++;
 	memcpy(players[playernum].favoritweapon,*cp,NUMWEAPONS);
 	*cp+=NUMWEAPONS;
 	players[playernum].autoaim_toggle=*(*cp)++;
+
+#ifdef HERITAGE_WEAPONPREF
+	h_pref=*(*cp)++;
+	Heritage_ReadWeaponPref(h_pref,playernum);
+#endif
 }
 
 void D_SendPlayerConfig(void)

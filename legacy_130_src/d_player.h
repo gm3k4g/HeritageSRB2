@@ -56,12 +56,12 @@
 //
 typedef enum
 {
-    // Playing or camping.
-    PST_LIVE,
-    // Dead on the ground, view follows killer.
-    PST_DEAD,
-    // Ready to restart/respawn???
-    PST_REBORN
+	// Playing or camping.
+	PST_LIVE,
+	// Dead on the ground, view follows killer.
+	PST_DEAD,
+	// Ready to restart/respawn???
+	PST_REBORN
 
 } playerstate_t;
 
@@ -71,20 +71,20 @@ typedef enum
 //
 typedef enum
 {
-    // No clipping, walk through barriers.
-    CF_NOCLIP           = 1,
-    // No damage, no health loss.
-    CF_GODMODE          = 2,
-    // Not really a cheat, just a debug aid.
-    CF_NOMOMENTUM       = 4,
+	// No clipping, walk through barriers.
+	CF_NOCLIP           = 1,
+	// No damage, no health loss.
+	CF_GODMODE          = 2,
+	// Not really a cheat, just a debug aid.
+	CF_NOMOMENTUM       = 4,
 
-    //added:28-02-98: new cheats
-    CF_FLYAROUND        = 8,
+	//added:28-02-98: new cheats
+	CF_FLYAROUND        = 8,
 
-    //added:28-02-98: NOT REALLY A CHEAT
-    // Allow player avatar to walk in-air
-    //  if trying to get over a small wall (hack for playability)
-    CF_JUMPOVER         = 16
+	//added:28-02-98: NOT REALLY A CHEAT
+	// Allow player avatar to walk in-air
+	//  if trying to get over a small wall (hack for playability)
+	CF_JUMPOVER         = 16
 
 } cheat_t;
 
@@ -94,161 +94,166 @@ typedef enum
 // ========================================================================
 typedef struct player_s
 {
-    mobj_t*             mo;
+	mobj_t*             mo;
 
 	// Emerald hunting Tails 12-20-2001
 	mobj_t*             hunt1;
 	mobj_t*             hunt2;
 	mobj_t*             hunt3;
 
-    // added 1-6-98: for movement prediction
+	// added 1-6-98: for movement prediction
 #ifdef CLIENTPREDICTION2
-    mobj_t*             spirit;
+	mobj_t*             spirit;
 #endif
-    playerstate_t       playerstate;
-    ticcmd_t            cmd;
+	playerstate_t       playerstate;
+	ticcmd_t            cmd;
 
-    // Determine POV,
-    //  including viewpoint bobbing during movement.
-    // Focal origin above r.z
-    fixed_t             viewz;
-    // Base height above floor for viewz.
-    fixed_t             viewheight;
-    // Bob/squat speed.
-    fixed_t             deltaviewheight;
-    // bounded/scaled total momentum.
-    fixed_t             bob;
+	// Determine POV,
+	//  including viewpoint bobbing during movement.
+	// Focal origin above r.z
+	fixed_t             viewz;
+	// Base height above floor for viewz.
+	fixed_t             viewheight;
+	// Bob/squat speed.
+	fixed_t             deltaviewheight;
+	// bounded/scaled total momentum.
+	fixed_t             bob;
 
-    //added:16-02-98: mouse aiming, where the guy is looking at!
-    //                 It is updated with cmd->aiming.
-    angle_t             aiming;
+	//added:16-02-98: mouse aiming, where the guy is looking at!
+	//                 It is updated with cmd->aiming.
+	angle_t             aiming;
 
-#ifdef HERITAGE_DIRECTIONCHAR // Lactozilla: Heritage
-    // fun thing for player sprite
-	angle_t drawangle;
+#ifdef HERITAGE_DIRECTIONCHAR
+	// fun thing for player sprite
+	angle_t             drawangle;
 #endif
 
-    // This is only used between levels,
-    // mo->health is used during levels.
-    int                 health;
-    int                 armorpoints;
-    // Armor type is 0-2.
-    UINT8               armortype;
+	// This is only used between levels,
+	// mo->health is used during levels.
+	int                 health;
+	int                 armorpoints;
+	// Armor type is 0-2.
+	UINT8               armortype;
 
-    // Power ups. invinc and invis are tic counters.
-    int                 powers[NUMPOWERS];
-    UINT8               cards; // bit field see declration of card_t
-    boolean             backpack;
+	// Power ups. invinc and invis are tic counters.
+	int                 powers[NUMPOWERS];
+	UINT8               cards; // bit field see declration of card_t
+	boolean             backpack;
 
-    // Frags, kills of other players.
-    USHORT              addfrags;   // player have killed a player but is gone
-    USHORT              frags[MAXPLAYERS];
-    weapontype_t        readyweapon;
+#ifdef HERITAGE_WEAPONPREF
+	boolean             directionchar;
+	boolean             heritagemovement;
+#endif
 
-    // Is wp_nochange if not changing.
-    weapontype_t        pendingweapon;
+	// Frags, kills of other players.
+	UINT16              addfrags;   // player have killed a player but is gone
+	UINT16              frags[MAXPLAYERS];
+	weapontype_t        readyweapon;
 
-    boolean             weaponowned[NUMWEAPONS];
-    int                 ammo[NUMAMMO];
-    int                 maxammo[NUMAMMO];
-     // added by Boris : preferred weapons order stuff
-     char                favoritweapon[NUMWEAPONS];
-     boolean             originalweaponswitch;
-     //added:28-02-98:
-     boolean             autoaim_toggle;
+	// Is wp_nochange if not changing.
+	weapontype_t        pendingweapon;
 
-    // True if button down last tic.
-    boolean             attackdown;
-    boolean             usedown;
-    boolean             jumpdown;   //added:19-03-98:dont jump like a monkey!
+	boolean             weaponowned[NUMWEAPONS];
+	int                 ammo[NUMAMMO];
+	int                 maxammo[NUMAMMO];
+	// added by Boris : preferred weapons order stuff
+	char                favoritweapon[NUMWEAPONS];
+	boolean             originalweaponswitch;
+	//added:28-02-98:
+	boolean             autoaim_toggle;
 
-    // Bit flags, for cheats and debug.
-    // See cheat_t, above.
-    int                 cheats;
+	// True if button down last tic.
+	boolean             attackdown;
+	boolean             usedown;
+	boolean             jumpdown;   //added:19-03-98:dont jump like a monkey!
 
-    // Refired shots are less accurate.
-    int                 refire;
+	// Bit flags, for cheats and debug.
+	// See cheat_t, above.
+	int                 cheats;
 
-     // For intermission stats.
-    int                 killcount;
-    int                 itemcount;
-    int                 secretcount;
+	// Refired shots are less accurate.
+	int                 refire;
 
-    // Hint messages.
-    char*               message;
+	 // For intermission stats.
+	int                 killcount;
+	int                 itemcount;
+	int                 secretcount;
 
-    // For screen flashing (red or bright).
-    int                 damagecount;
-    int                 bonuscount;
+	// Hint messages.
+	char*               message;
 
-    // Who did damage (NULL for floors/ceilings).
-    mobj_t*             attacker;
-    int                 specialsector;      //lava/slime/water...
+	// For screen flashing (red or bright).
+	int                 damagecount;
+	int                 bonuscount;
 
-    // So gun flashes light up areas.
-    int                 extralight;
+	// Who did damage (NULL for floors/ceilings).
+	mobj_t*             attacker;
+	int                 specialsector;      //lava/slime/water...
 
-    // Current PLAYPAL, ???
-    //  can be set to REDCOLORMAP for pain, etc.
-    int                 fixedcolormap;
+	// So gun flashes light up areas.
+	int                 extralight;
 
-    // Player skin colorshift,
-    //  0-3 for which color to draw player.
-    // adding 6-2-98 comment : unused by doom2 1.9 now is used
-    int                 skincolor;
+	// Current PLAYPAL, ???
+	//  can be set to REDCOLORMAP for pain, etc.
+	int                 fixedcolormap;
 
-    // added 2/8/98
-    int                 skin;
+	// Player skin colorshift,
+	//  0-3 for which color to draw player.
+	// adding 6-2-98 comment : unused by doom2 1.9 now is used
+	int                 skincolor;
 
-    // Overlay view sprites (gun, etc).
-    pspdef_t            psprites[NUMPSPRITES];
+	// added 2/8/98
+	int                 skin;
 
-    // True if secret level has been done.
-    boolean             didsecret;
+	// Overlay view sprites (gun, etc).
+	pspdef_t            psprites[NUMPSPRITES];
 
-    int score; // player score Tails 03-01-2000
-    int dashspeed; // dashing speed Tails 03-01-2000
+	// True if secret level has been done.
+	boolean             didsecret;
 
-    int charspeed; // Speed definition Tails 03-01-2000
+	int score; // player score Tails 03-01-2000
+	int dashspeed; // dashing speed Tails 03-01-2000
+
+	int charspeed; // Speed definition Tails 03-01-2000
 	int charability; // Ability definition Tails 11-15-2000
 
-    int lives; // do lives now, worry about continues later Tails 03-09-2000
-    int continues; // continues that player has acquired Tails 03-11-2000
+	int lives; // do lives now, worry about continues later Tails 03-09-2000
+	int continues; // continues that player has acquired Tails 03-11-2000
 
-    int timebonus; // Time Bonus Tails 03-10-2000
-    int ringbonus; // Ring Bonus Tails 03-10-2000
-    int fscore; // Fake score for intermissions Tails 03-12-2000
-    int seconds; // Tails 06-13-2000
-    int minutes; // Tails 06-13-2000
+	int timebonus; // Time Bonus Tails 03-10-2000
+	int ringbonus; // Ring Bonus Tails 03-10-2000
+	int fscore; // Fake score for intermissions Tails 03-12-2000
+	int seconds; // Tails 06-13-2000
+	int minutes; // Tails 06-13-2000
 
 // start emeralds Tails 04-08-2000
-    int emerald1;
-    int emerald2;
-    int emerald3;
-    int emerald4;
-    int emerald5;
-    int emerald6;
-    int emerald7;
+	int emerald1;
+	int emerald2;
+	int emerald3;
+	int emerald4;
+	int emerald5;
+	int emerald6;
+	int emerald7;
 	int token; // Number of tokens collected in a level Tails 08-11-2001
 	int lastmap; // Last level you were at Tails 08-11-2001
-	int	sstimer; // Time allotted in the special stage Tails 08-11-2001
+	int sstimer; // Time allotted in the special stage Tails 08-11-2001
 // end emeralds Tails 04-08-2000
 
-    int superready; // Ready for Super? Tails 04-08-2000
+	int superready; // Ready for Super? Tails 04-08-2000
 
-    int acceleration; // Acceleration Tails 04-24-2000
+	int acceleration; // Acceleration Tails 04-24-2000
 
-    int xtralife; // Ring Extra Life counter
+	int xtralife; // Ring Extra Life counter
 
 	int xtralife2; // Score xtra life counter
 
-    int walking; // Are the walking frames playing? Tails 08-18-2000
-    int running; // Are the running frames playing? Tails 08-18-2000
-    int spinning; // Are the spinning frames playing? Tails 08-18-2000
-    int speed; // Player's speed (distance formula of MOMX and MOMY values) Tails 08-21-2000
-    int mforward; // Moving forward
-    int mbackward; // Moving backward
-    int jumping; // Jump counter Tails 10-14-2000
+	int walking; // Are the walking frames playing? Tails 08-18-2000
+	int running; // Are the running frames playing? Tails 08-18-2000
+	int spinning; // Are the spinning frames playing? Tails 08-18-2000
+	int speed; // Player's speed (distance formula of MOMX and MOMY values) Tails 08-21-2000
+	int mforward; // Moving forward
+	int mbackward; // Moving backward
+	int jumping; // Jump counter Tails 10-14-2000
 
 	// Moved eflags to player ints Tails 10-30-2000
 	int mfjumped;
@@ -302,7 +307,7 @@ typedef struct player_s
 	int gotflag; // 1 == Red  2 == Blue Do you have the flag? Tails 07-22-2001
 	int bluescore; // Team Scores Tails 07-31-2001
 	int redscore; // Team Scores Tails 07-31-2001
-    mapthing_t          *flagpoint; // Original flag spawn location Tails 08-02-2001
+	mapthing_t *flagpoint; // Original flag spawn location Tails 08-02-2001
 
 	int redxvi; // RedXVI
 
@@ -320,34 +325,34 @@ typedef struct player_s
 //
 typedef struct
 {
-    boolean     in;     // whether the player is in game
+	boolean     in;     // whether the player is in game
 
-    // Player stats, kills, collected items etc.
-    int         sscore; // score tally Tails 03-09-2000
-    int         skills;
-    int         sitems;
-    int         ssecret;
+	// Player stats, kills, collected items etc.
+	int         sscore; // score tally Tails 03-09-2000
+	int         skills;
+	int         sitems;
+	int         ssecret;
 	int			minutes; // Tails
 	int			seconds; // Tails
-    USHORT      frags[MAXPLAYERS]; // added 17-1-98 more than 4 players
-    // BP: unused for now but don't forget....
-    USHORT      addfrags;
+	UINT16      frags[MAXPLAYERS]; // added 17-1-98 more than 4 players
+	// BP: unused for now but don't forget....
+	UINT16      addfrags;
 
 } wbplayerstruct_t;
 
 typedef struct
 {
-    // if true, splash the secret level
-    boolean     didsecret;
+	// if true, splash the secret level
+	boolean     didsecret;
 
-    // previous and next levels, origin 0
-    int         last;
-    int         next;
+	// previous and next levels, origin 0
+	int         last;
+	int         next;
 
-    // index of this player in game
-    int         pnum;
+	// index of this player in game
+	int         pnum;
 
-    wbplayerstruct_t    plyr[MAXPLAYERS];
+	wbplayerstruct_t    plyr[MAXPLAYERS];
 } wbstartstruct_t;
 
 

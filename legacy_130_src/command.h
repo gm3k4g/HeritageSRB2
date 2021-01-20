@@ -154,6 +154,12 @@ void  CV_Set (consvar_t *var, const char *value);
 // expands value to a string and calls CV_Set
 void  CV_SetValue (consvar_t *var, int value);
 
+// CV_Set without calling the on change function
+void  CV_StealthSet (consvar_t *var, const char *value);
+
+// CV_SetValue without calling the on change function
+void  CV_StealthSetValue (consvar_t *var, int value);
+
 // it a setvalue but with a modulo at the maximum
 void  CV_AddValue (consvar_t *var, int increment);
 

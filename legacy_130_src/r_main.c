@@ -190,10 +190,7 @@ lighttable_t*           extra_colormaps[MAXCOLORMAPS];
 // bumped light from gun blasts
 int                     extralight;
 
-consvar_t cv_chasecam = {"chasecam","1",0,CV_OnOff}; // Tails
-consvar_t cv_homing = {"homing","0",0,CV_OnOff}; // Tails 07-02-2001
 consvar_t cv_numsnow = {"numsnow","16",CV_SAVE,CV_Unsigned}; // Tails 12-25-2001
-consvar_t cv_nights = {"nights","0",0,CV_OnOff}; // Tails 07-02-2001
 consvar_t cv_allowmlook = {"allowmlook","1",CV_NETVAR,CV_YesNo};
 
 consvar_t cv_psprites = {"playersprites","0",0,CV_OnOff}; // Tails

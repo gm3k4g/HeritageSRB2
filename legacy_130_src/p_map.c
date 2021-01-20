@@ -1436,7 +1436,7 @@ boolean PTR_SlideTraverse (intercept_t* in)
 					goto noclimb;
 
 #ifdef HERITAGE_PLAYER_MOVEMENT
-				if (cv_heritage_playermovement.value)
+				if (Heritage_PlayerMovement(slidemo->player))
 				{
 					angle_t climbangle;
 					INT32 whichside = P_PointOnLineSide(slidemo->x, slidemo->y, li);

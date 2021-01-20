@@ -159,6 +159,9 @@ void   P_PlayerThink (player_t* player);
 void   CL_ResetSpiritPosition (mobj_t *mobj);
 void   P_MoveSpirit (player_t* player,ticcmd_t *cmd);
 
+boolean Heritage_PlayerMovement(player_t *player);
+boolean Heritage_DirectionChar(player_t *player);
+
 //
 // P_MOBJ
 //
@@ -292,7 +295,7 @@ P_RadiusAttack
 //
 // P_SETUP
 //
-extern UINT8*            rejectmatrix;   // for fast sight rejection
+extern UINT8*           rejectmatrix;   // for fast sight rejection
 extern short*           blockmaplump;   // offsets in blockmap are from here
 extern short*           blockmap;
 extern int              bmapwidth;
