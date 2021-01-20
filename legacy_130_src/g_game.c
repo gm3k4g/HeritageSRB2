@@ -1284,7 +1284,7 @@ void G_PlayerReborn (int player)
 {
 	player_t*   p;
 	int         i;
-	USHORT      frags[MAXPLAYERS];
+	UINT16      frags[MAXPLAYERS];
 	int         score; // Score Tails 03-09-2000
 	int         killcount;
 	int         itemcount;
@@ -1310,7 +1310,7 @@ void G_PlayerReborn (int player)
 	int			sstimer; // Tails 08-11-2001
 	int			token; // Tails 08-12-2001
 	int			tagcount; // Tails 08-17-2001
-	USHORT      addfrags;
+	UINT16      addfrags;
 
 	//from Boris
 	int         skincolor;
@@ -1320,6 +1320,11 @@ void G_PlayerReborn (int player)
 	int         skin;                           //Fab: keep same skin
 #ifdef CLIENTPREDICTION2
 	mobj_t      *spirit;
+#endif
+
+#ifdef HERITAGE_WEAPONPREF
+	boolean     directionchar;
+	boolean     heritagemovement;
 #endif
 
 	memcpy (frags,players[player].frags,sizeof(frags));
@@ -1359,6 +1364,12 @@ void G_PlayerReborn (int player)
 #ifdef CLIENTPREDICTION2
 	spirit = players[player].spirit;
 #endif
+
+#ifdef HERITAGE_WEAPONPREF
+	directionchar = players[player].directionchar;
+	heritagemovement = players[player].heritagemovement;
+#endif
+
 	p = &players[player];
 	memset (p, 0, sizeof(*p));
 
@@ -1398,6 +1409,11 @@ void G_PlayerReborn (int player)
 	players[player].charspeed = charspeed; // Tails
 #ifdef CLIENTPREDICTION2
 	players[player].spirit = spirit;
+#endif
+
+#ifdef HERITAGE_WEAPONPREF
+	players[player].directionchar = directionchar;
+	players[player].heritagemovement = heritagemovement;
 #endif
 
 	p->usedown = p->attackdown = true;  // don't do anything immediately
