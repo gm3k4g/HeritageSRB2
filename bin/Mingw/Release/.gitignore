@@ -1,4 +1,10 @@
 *.exe
 *.mo
-r_opengl.dll
+*.dll
+*.srb
+*.wad
+*.plr
+*.gz
+*.cfg
+*.txt
 *.bat
